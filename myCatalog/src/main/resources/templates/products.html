@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Products</title>
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.3/css/bootstrap.min.css" </head>
+
+<body>
+  <div class="container mt-5">
+	<div>
+		<div class="card-header">Product list</div>
+		<div class="card-body">
+		   
+            <form class="mt-1" th:action="@{products}" method="GET">
+              <div class="mb-3">
+                <label>Keyword:</label>
+                <input type="text" name="kw" th:value="${kw}"/>
+                <button class="btn btn-success">search</button>
+              </div>
+            </form>
+		
+		
+			<table class="table">
+				<tr>
+					<th>ID</th>
+					<th>Designation</th>
+					<th>Price</th>
+					<th>QTY</th>
+				<tr th:each="p:${pageProducts.content}">
+					<td th:text="${p.id}"></td>
+					<td th:text="${p.designation}"></td>
+					<td th:text="${p.price}"></td>
+					<td th:text="${p.quantity}"></td>
+					<td> 
+					  <form method="POST" th:action="@{deleteProduct(id=${p.id}, page=${currentPage}, size=${size}, kw=${kw})}">
+					  <button onclick="javascript:return confirm('Are you sure you want to delete it ?')"
+					          class="btn btn-danger" type="submit">Delete</button>
+					  </form>
+					</td>
+				</tr>
+				</tr>
+			</table>
+			<ul class="nav nav-pills">
+			  <li th:each="page,status:${pages}">
+			   <a th:class="${status.index==currentPage?'btn btn-primary':'btn'}" 
+			      th:href="@{products(page=${status.index}, size=${size}, kw=${kw})}" 
+			      th:text="${status.index+1}"></a>
+			  </li>
+			</ul>
+		</div>
+	</div>
+  </div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var contents = /*[[${pageProducts.content}]]*/ 'default';
+    console.log(contents);
+
+/*]]>*/
+</script>
+</body>
+
+</html>
